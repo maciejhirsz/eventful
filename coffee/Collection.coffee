@@ -18,7 +18,7 @@ class CollectionAbstract extends ObjectAbstract
     #
     model: Model
     #
-    #
+    # analog to idAttribute option of  model, will be used when creating models with the create method
     #
     idAttribute: null
 
@@ -65,7 +65,7 @@ class CollectionAbstract extends ObjectAbstract
     #
     # create a model with provided attributes
     #
-    return new @options.model(attributes)
+    return new @options.model(attributes, idAttribute: @options.idAttribute)
 
   # -----------------------------------
 
