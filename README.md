@@ -1,9 +1,8 @@
-<pre>
-  ________      ________ _   _ _______ ______ _    _ _      
- |  ____\ \    / /  ____| \ | |__   __|  ____| |  | | |     
- | |__   \ \  / /| |__  |  \| |  | |  | |__  | |  | | |     
- |  __|   \ \/ / |  __| | . ` |  | |  |  __| | |  | | |     
- | |____   \  /  | |____| |\  |  | |  | |    | |__| | |____ 
- |______|   \/   |______|_| \_|  |_|  |_|     \____/|______|
-                                                            
-</pre>
+eventful
+========
+
+What the heck?
+--------------
+
+For now, this is just a mere bunch of classes written in CoffeeScript to be used with node.js. Eventually
+though _eventful_ aims to be a full featured websocket-game-server :).
