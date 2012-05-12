@@ -8,7 +8,11 @@ class CollectionAbstract extends ObjectAbstract
 
   # -----------------------------------
 
-  _models: {}
+  _modelsHash: {}
+
+  # -----------------------------------
+
+  models: []
 
   # -----------------------------------
 
@@ -21,6 +25,11 @@ class CollectionAbstract extends ObjectAbstract
     # analog to idAttribute option of  model, will be used when creating models with the create method
     #
     idAttribute: null
+
+  # -----------------------------------
+
+  _filterFromArray: (array, element) ->
+    x for x in array when x isnt element
 
   # -----------------------------------
 
@@ -46,14 +55,20 @@ class CollectionAbstract extends ObjectAbstract
     #
     # no overriding!
     #
-    throw "Model #{model.id} already exists in the collection!" if @_models[model.id] isnt undefined
+    throw "Model #{model.id} already exists in the collection!" if @_modelsHash[model.id] isnt undefined
 
-    @_models[model.id] = model
+    #
+    # put the model into the hash and array
+    #
+    @_modelsHash[model.id] = model
+    @models.push(model)
 
     #
     # increase collection lenght
     #
     @length += 1
+
+    model.on('destroy', (id) => @remove(id))
 
     @trigger('add', model)
 
@@ -73,9 +88,15 @@ class CollectionAbstract extends ObjectAbstract
     #
     # checks if a model exists in the collection
     #
-    return true if @_models[id] isnt undefined
+    return true if @_modelsHash[id] isnt undefined
 
     return false
+
+  # -----------------------------------
+
+  at: (index) ->
+    return @models[index] if @models[index] isnt undefined
+    return null
 
   # -----------------------------------
 
@@ -83,9 +104,9 @@ class CollectionAbstract extends ObjectAbstract
     #
     # returns a model with a given id, otherwise returns null
     #
-    return null if @_models[id] is undefined
+    return null if @_modelsHash[id] is undefined
 
-    return @_models[id]
+    return @_modelsHash[id]
 
   # -----------------------------------
 
@@ -93,11 +114,19 @@ class CollectionAbstract extends ObjectAbstract
     #
     # removes a model from the collection
     #
-    return false if @_models[id] is undefined
+    return false if @_modelsHash[id] is undefined
 
-    model = @_models[id]
+    model = @_modelsHash[id]
 
-    delete @_models[id]
+    #
+    # remove the model from the hash
+    #
+    delete @_modelsHash[id]
+
+    #
+    # remove the model from the array
+    #
+    @models = @_filterFromArray(@models, model)
 
     #
     # decrease collection length
@@ -114,11 +143,11 @@ class CollectionAbstract extends ObjectAbstract
     #
     # resets the collection and populates it with new data if given
     #
-    tempCache = @_models
+    tempCache = @_modelsHash
 
     @length = 0
     @_lastIndex = -1
-    @_models = {}
+    @_modelsHash = {}
 
     #
     # trigger remove event for all wiped items
@@ -138,7 +167,7 @@ class CollectionAbstract extends ObjectAbstract
     #
     throw "Callback must be a function" if typeof callback isnt 'function'
 
-    callback(model, id) for id, model of @_models
+    callback(model, id) for id, model of @_modelsHash
 
     return @length
 
