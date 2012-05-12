@@ -1,4 +1,4 @@
-eventful
+EVENTFUL
 ========
 
 What the heck?
