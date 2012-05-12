@@ -38,7 +38,7 @@ class CollectionAbstract extends ObjectAbstract
     #
     # checks if what we got is an actual model or data set, if latter then create a model out of it!
     #
-    if model._isModel isnt true
+    if data._isModel isnt true
       model = @create(data)
     else
       model = data
