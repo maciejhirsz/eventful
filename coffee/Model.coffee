@@ -84,6 +84,14 @@ class Model extends ObjectAbstract
 
   # -----------------------------------
 
+  destroy: ->
+    #
+    # destroys the model, removing it from all collections
+    #
+    @trigger('destroy', model.id)
+
+  # -----------------------------------
+
   getChanges: ->
     #
     # returns a hash of all changes to the model since creation *or* previous getChanges() call,
