@@ -1,8 +1,14 @@
+
 #
+# eventful
+# ========
+#
+
+# 
 # export all the modules
 #
 module.exports =
-  abstract        : require('abstract')
+  abstracts       : require('abstracts')
   Model           : require('Model')
   Collection      : require('Collection')
   ActorModel      : require('ActorModel')
