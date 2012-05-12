@@ -1,5 +1,5 @@
 
-ObjectAbstract = require 'ObjectAbstract'
+ObjectAbstract = require('ObjectAbstract')
 
 class ActionAbstract extends ObjectAbstract
   

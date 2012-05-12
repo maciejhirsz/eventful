@@ -25,10 +25,13 @@ class ObjectAbstract
     #
     # set the @option property with new options or use defaults
     #
-    for option of @options
-      @options[option] = options[option] if options[option] isnt undefined
+    if options isnt undefined
+      for option of @options
+        @options[option] = options[option] if options[option] isnt undefined
 
-    return @options
+      return true
+
+    return false
 
   # -----------------------------------
 
