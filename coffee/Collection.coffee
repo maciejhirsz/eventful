@@ -1,5 +1,5 @@
 
-ObjectAbstract = require('abstract').ObjectAbstract
+ObjectAbstract = require('abstracts').ObjectAbstract
 Model = require('Model')
 
 class CollectionAbstract extends ObjectAbstract
@@ -167,9 +167,17 @@ class CollectionAbstract extends ObjectAbstract
     #
     throw "Callback must be a function" if typeof callback isnt 'function'
 
-    callback(model, id) for id, model of @_modelsHash
+    callback(model) for model in @models
 
     return @length
+
+  # -----------------------------------
+
+  filter: (filterCallback) ->
+    #
+    # returns an array of all models matching the filter
+    #
+    model for model in @models when filterCallback(model)
 
 
 ############################
