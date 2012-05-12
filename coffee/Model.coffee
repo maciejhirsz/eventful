@@ -1,5 +1,5 @@
 
-ObjectAbstract = require('abstract').ObjectAbstract
+ObjectAbstract = require('abstracts').ObjectAbstract
 
 #
 # an internal counter, will give each model with idAttribute option set to null a unique id
