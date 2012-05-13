@@ -25,6 +25,15 @@ class CollectionAbstract extends ObjectAbstract
     # analog to idAttribute option of  model, will be used when creating models with the create method
     #
     idAttribute: null
+    #
+    # comparator for sorting should be a function taking either one model as argument and returning value by which
+    # the model should be sorted, or taking two models and returning -1, 0 or 1...
+    #
+    comparator: null
+    #
+    # reverse sorting flag
+    #
+    reverseSort: false
 
   # -----------------------------------
 
@@ -68,6 +77,9 @@ class CollectionAbstract extends ObjectAbstract
     #
     @length += 1
 
+    #
+    # remove model from collection if a destroy event is triggered on it!
+    #
     model.on('destroy', (id) => @remove(id))
 
     @trigger('add', model)
