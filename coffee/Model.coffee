@@ -50,32 +50,39 @@ class Model extends ObjectAbstract
 
   # -----------------------------------
 
-  set: (attributes, value) ->
+  set: (attributes, value, options) ->
     if typeof attributes is 'string' and value isnt undefined
       #
       # model.set("key", value) call
       #
-      if @_attributes[attributes] isnt value
-        @_attributes[attributes] = value
-        @_changes[attributes] = value
+      options or options = {}
+      key = attributes
 
-        @trigger('change:'+attributes)
-        @trigger('change')
+      if @_attributes[key] isnt value
+        @_attributes[key] = value
+        @_changes[key] = value
+
+        if options.silent isnt true
+          @trigger('change:'+key)
+          @trigger('change')
 
       return true
 
-    else if typeof attributes is 'object' and value is undefined
+    else if typeof attributes is 'object' and options is undefined
       #
       # model.set("key": value, ...) call
       #
+      options = value or {}
+
       changed = false
       for key, value of attributes
         if typeof key is 'string' and @_attributes[attributes] isnt value
           @_attributes[key] = value
           @_changes[key] = value
 
-          changed = true
-          @trigger('change:'+key)
+          if options.silent isnt true
+            changed = true
+            @trigger('change:'+key)
 
       @trigger('change') if changed
 
@@ -91,11 +98,13 @@ class Model extends ObjectAbstract
 
   # -----------------------------------
 
-  destroy: ->
+  destroy: (options) ->
     #
     # destroys the model, removing it from all collections
     #
-    @trigger('destroy', model.id)
+    options or options = {}
+
+    @trigger('destroy', model.id) if options.silent isnt true
 
   # -----------------------------------
 

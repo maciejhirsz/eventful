@@ -53,10 +53,12 @@ class CollectionAbstract extends ObjectAbstract
 
   # -----------------------------------
 
-  add: (data) ->
+  add: (data, options) ->
     #
     # adds a model to the collection
     #
+    options or options = {}
+
     throw "Tried to add #{typeof data} value to the collection, expected object" if typeof data isnt 'object'
 
     #
@@ -88,12 +90,12 @@ class CollectionAbstract extends ObjectAbstract
     #
     model.on('destroy', (id) => @remove(id))
 
-    @trigger('add', model)
+    @trigger('add', model) if options.silent isnt true
 
     #
     # auto sort the collection
     #
-    @sort() if @options.comparator?
+    @sort(silent: true) if @options.comparator?
 
     return model.id
 
@@ -133,10 +135,12 @@ class CollectionAbstract extends ObjectAbstract
 
   # -----------------------------------
 
-  remove: (id) ->
+  remove: (id, options) ->
     #
     # removes a model from the collection
     #
+    options or options = {}
+
     return false if @_modelsHash[id] is undefined
 
     model = @_modelsHash[id]
@@ -156,16 +160,18 @@ class CollectionAbstract extends ObjectAbstract
     #
     @length -= 1
 
-    @trigger('remove', model)
+    @trigger('remove', model) if options.silent isnt true
 
     return true
 
   # -----------------------------------
 
-  reset: (data) ->
+  reset: (data, options) ->
     #
     # resets the collection and populates it with new data if given
     #
+    options or options = {}
+
     tempCache = @_modelsHash
 
     @length = 0
@@ -180,11 +186,13 @@ class CollectionAbstract extends ObjectAbstract
     if data isnt undefined and data instanceof Array
       @add(item) for item in data
 
-    @trigger('reset')
+    @trigger('reset') if options.silent isnt true
 
   # -----------------------------------
 
-  sort: ->
+  sort: (options) ->
+    options or options = {}
+
     #
     # sorts the collection using comparator
     #
@@ -220,6 +228,8 @@ class CollectionAbstract extends ObjectAbstract
       @models.sort(comparator)
 
     @models.reverse() if @options.reverseSort is true
+
+    @trigger('reset') if options.silent isnt true
 
   # -----------------------------------
 
