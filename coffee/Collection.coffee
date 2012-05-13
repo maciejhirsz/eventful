@@ -21,15 +21,18 @@ class CollectionAbstract extends ObjectAbstract
     # a class to be used with
     #
     model: Model
+
     #
     # analog to idAttribute option of  model, will be used when creating models with the create method
     #
     idAttribute: null
+
     #
     # comparator for sorting should be a function taking either one model as argument and returning value by which
     # the model should be sorted, or taking two models and returning -1, 0 or 1...
     #
     comparator: null
+    
     #
     # reverse sorting flag
     #
