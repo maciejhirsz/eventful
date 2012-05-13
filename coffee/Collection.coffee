@@ -95,7 +95,7 @@ class CollectionAbstract extends ObjectAbstract
     #
     # auto sort the collection
     #
-    @sort(silent: true) if @options.comparator?
+    @sort(silent: true) if @options.comparator? and options.noSort isnt true
 
     return model.id
 
@@ -184,9 +184,9 @@ class CollectionAbstract extends ObjectAbstract
     @trigger('remove', model) for id, model of tempCache
 
     if data isnt undefined and data instanceof Array
-      @add(item) for item in data
+      @add(item, noSort: true) for item in data
 
-    @trigger('reset') if options.silent isnt true
+    @sort(silent: options.silent)
 
   # -----------------------------------
 
