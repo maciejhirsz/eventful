@@ -28,11 +28,14 @@ class CollectionAbstract extends ObjectAbstract
     idAttribute: null
 
     #
-    # comparator for sorting should be a function taking either one model as argument and returning value by which
-    # the model should be sorted, or taking two models and returning -1, 0 or 1...
+    # comparator for sorting should be a string with attribute key by which models should be sorted,
+    #   or
+    # a function taking one model as argument and returning value by which the models should be sorted,
+    #   or
+    # a function taking two models and returning a positive number, negative number or 0
     #
     comparator: null
-    
+
     #
     # reverse sorting flag
     #
@@ -86,6 +89,11 @@ class CollectionAbstract extends ObjectAbstract
     model.on('destroy', (id) => @remove(id))
 
     @trigger('add', model)
+
+    #
+    # auto sort the collection
+    #
+    @sort() if @options.comparator?
 
     return model.id
 
@@ -173,6 +181,45 @@ class CollectionAbstract extends ObjectAbstract
       @add(item) for item in data
 
     @trigger('reset')
+
+  # -----------------------------------
+
+  sort: ->
+    #
+    # sorts the collection using comparator
+    #
+    throw "Tried to sort the collection without a comparator" if typeof @options.comparator not in ['function', 'string']
+
+    #
+    # if comparator is an attribute string, then create a function for it
+    #
+    if typeof @options.comparator is 'string'
+      comparator = (model) -> model.get('string')
+    else
+      comparator = @options.comparator
+
+    if comparator.lenght is 1
+      #
+      # sort by a poperty of the model
+      #
+      @models.sort (left, right) ->
+        a = comparator(left)
+        b = comparator(right)
+
+        if a < b
+          -1
+        else if a > b
+          1
+        else
+          0
+
+    else if comparator.length is 2
+      #
+      # regular sort with comparator
+      #
+      @models.sort(comparator)
+
+    @models.reverse() if @options.reverseSort is true
 
   # -----------------------------------
 
