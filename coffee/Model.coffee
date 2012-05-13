@@ -70,7 +70,7 @@ class Model extends ObjectAbstract
       #
       changed = false
       for key, value of attributes
-        if @_attributes[attributes] isnt value
+        if typeof key is 'string' and @_attributes[attributes] isnt value
           @_attributes[key] = value
           @_changes[key] = value
 
