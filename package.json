@@ -1,0 +1,4 @@
+{
+  "name" : "eventful",
+  "main" : "./lib/eventful.js"
+}
