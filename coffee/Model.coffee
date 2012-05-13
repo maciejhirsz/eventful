@@ -55,10 +55,12 @@ class Model extends ObjectAbstract
       #
       # model.set("key", value) call
       #
-      @_attributes[attributes] = value
-      @_changes[attributes] = value
+      if @_attributes[attributes] isnt value
+        @_attributes[attributes] = value
+        @_changes[attributes] = value
 
-      @trigger('change')
+        @trigger('change:'+attributes)
+        @trigger('change')
 
       return true
 
@@ -66,11 +68,16 @@ class Model extends ObjectAbstract
       #
       # model.set("key": value, ...) call
       #
+      changed = false
       for key, value of attributes
-        @_attributes[key] = value
-        @_changes[key] = value
-      
-      @trigger('change')
+        if @_attributes[attributes] isnt value
+          @_attributes[key] = value
+          @_changes[key] = value
+
+          changed = true
+          @trigger('change:'+key)
+
+      @trigger('change') if changed
 
       return true
 
